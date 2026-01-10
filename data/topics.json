@@ -1,0 +1,86 @@
+[
+  {
+    "topic": "Radio Navigation",
+    "count": 271
+  },
+  {
+    "topic": "Powerplant",
+    "count": 157
+  },
+  {
+    "topic": "GNSS",
+    "count": 82
+  },
+  {
+    "topic": "Radio Nav",
+    "count": 54
+  },
+  {
+    "topic": "Cat A",
+    "count": 47
+  },
+  {
+    "topic": "Emergency Actions",
+    "count": 47
+  },
+  {
+    "topic": "Limitations",
+    "count": 45
+  },
+  {
+    "topic": "General",
+    "count": 44
+  },
+  {
+    "topic": "SAS+Autopilot",
+    "count": 35
+  },
+  {
+    "topic": "Lifting System",
+    "count": 26
+  },
+  {
+    "topic": "NPAS SOPs",
+    "count": 24
+  },
+  {
+    "topic": "NVG Ops",
+    "count": 23
+  },
+  {
+    "topic": "Flight Planning",
+    "count": 10
+  },
+  {
+    "topic": "Uncategorised",
+    "count": 9
+  },
+  {
+    "topic": "Instruments",
+    "count": 8
+  },
+  {
+    "topic": "Avionics",
+    "count": 6
+  },
+  {
+    "topic": "Differences",
+    "count": 6
+  },
+  {
+    "topic": "Electrical",
+    "count": 3
+  },
+  {
+    "topic": "Airframe",
+    "count": 2
+  },
+  {
+    "topic": "Mass and Loading",
+    "count": 1
+  },
+  {
+    "topic": "Flight Control",
+    "count": 1
+  }
+]

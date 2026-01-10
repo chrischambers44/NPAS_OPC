@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>EC135 Revision (OPC Prep)</title>
+  <link rel="stylesheet" href="assets/style.css"/>
+</head>
+<body data-page="index">
+<header>
+  <h1>EC135 Revision (OPC Prep)</h1>
+  <div class="sub">Fast brain-load + question quickfire. Data-driven from <span class="kbd">data/qbank.json</span>.</div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div style="font-weight:600">Pick a topic</div>
+        <div class="small">Search → open topic → quickfire.</div>
+      </div>
+      <div class="pill" id="count">—</div>
+    </div>
+    <hr/>
+    <div class="row">
+      <input id="search" type="search" placeholder="Search topics (e.g., Powerplant, SAS+Autopilot, Cat A)"/>
+      <a class="btn" href="topic.html?topic=Uncategorised">Uncategorised</a>
+    </div>
+  </div>
+
+  <div style="height:12px"></div>
+
+  <div class="grid" id="topicGrid"></div>
+
+  <div style="height:18px"></div>
+  <div class="small">
+    Tip: keep the master question bank in <span class="kbd">data/qbank_clean.csv</span> and rebuild <span class="kbd">qbank.json</span> when you edit.
+  </div>
+</main>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
