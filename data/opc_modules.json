@@ -1,0 +1,199 @@
+[
+  {
+    "id": "fadec_fli",
+    "title": "FADEC / FLI / Needle split",
+    "summary": [
+      "Know what the indications mean (cause vs effect): FADEC FAIL vs FLI FAIL.",
+      "Use consistent language: call 'needle split', not 'TQ split'.",
+      "Be solid on 80% N1 (~30% TQ) and combined gearbox limit logic.",
+      "Prioritise immediate actions, then stabilise, then diagnose."
+    ],
+    "tre_looks_for": [
+      "Clear diagnosis narrative ('what I have / what I suspect / what I'm doing').",
+      "Correct end-state: stable Nr, known power setting, safe continuation/landing plan.",
+      "Sensible CRM: tell TFO/ATC what you’re doing and why."
+    ],
+    "common_pickups": [
+      "Chasing captions / tones instead of stabilising first.",
+      "Calling the wrong split ('TQ split') or misunderstanding FLI as a fault itself.",
+      "Weak numbers recall under pressure."
+    ],
+    "sim_patterns": [
+      "Multiple captions + no cancellation of warner → workload spike.",
+      "Throttle button position surprises after twist-grip rotation."
+    ],
+    "drills": [
+      {
+        "label": "OPC Drill (FADEC tagged)",
+        "href": "../drill.html?tags=opc,fadec"
+      },
+      {
+        "label": "FRC-linked questions",
+        "href": "../drill.html?tags=frc,fadec"
+      }
+    ]
+  },
+  {
+    "id": "electrical_fire",
+    "title": "Electrical fire / smoke / black cockpit thinking",
+    "summary": [
+      "Treat as time-critical: IAs first, then decide how much diagnosis is worth doing.",
+      "Know what you lose with gens off and what you still have (handheld, iPad).",
+      "Expect caption overload; keep the workcycle simple."
+    ],
+    "tre_looks_for": [
+      "Fast, decisive immediate actions.",
+      "Good captaincy: early intentions, prioritise survivability over neat diagnosis.",
+      "Understanding of load-sharing / why bus-ties are opened."
+    ],
+    "common_pickups": [
+      "Hunting amps/captions before completing IAs.",
+      "Late ATC/TFO brief before progressing to total DC.",
+      "Over-complicating diagnosis when scenario demands isolation and landing."
+    ],
+    "sim_patterns": [
+      "Rapid escalation to total DC while you’re still reading the CAD.",
+      "Intercom configuration surprises after gen selection."
+    ],
+    "drills": [
+      {
+        "label": "OPC Drill (Electrical tagged)",
+        "href": "../drill.html?tags=opc,electrical"
+      },
+      {
+        "label": "FRC Electrical/Smoke drill",
+        "href": "../drill.html?tags=frc,electrical"
+      }
+    ]
+  },
+  {
+    "id": "afcs_ahrs",
+    "title": "AFCS / AHRS / Reconfig / SAS (incl ‘red button’ judgement)",
+    "summary": [
+      "Use automation deliberately: Select → Engage → Monitor → Action.",
+      "Know the reconfiguration panel actions for common display/sensor failures.",
+      "Don’t press the 'red button' unless you intend/accept the consequences."
+    ],
+    "tre_looks_for": [
+      "Mode awareness: what’s engaged, what it will do next, what you’ll do if it doesn’t.",
+      "Stability management: keep a stable platform before troubleshooting.",
+      "Correct use of standby instruments and reconfig logic."
+    ],
+    "common_pickups": [
+      "Fighting the aircraft instead of commanding the modes.",
+      "Pressing the red button reflexively.",
+      "Not articulating what you expect the AP to do (or noticing it didn’t)."
+    ],
+    "sim_patterns": [
+      "AHRS roll fail / PFD weirdness that’s subtle at first.",
+      "Pitot/static oddities masquerading as speed control problems."
+    ],
+    "drills": [
+      {
+        "label": "OPC Drill (AFCS tagged)",
+        "href": "../drill.html?tags=opc,afcs"
+      },
+      {
+        "label": "IF / GNSS / nav support",
+        "href": "../drill.html?tag=if"
+      }
+    ]
+  },
+  {
+    "id": "fuel",
+    "title": "Fuel system failures / degraded fuel quantity",
+    "summary": [
+      "Be clear on what triggers pump cautions (air vs seizure current logic).",
+      "Know the progression to F QTY DEGR / FAIL and what you trust next.",
+      "Cross-check predicted vs actual fuel during IFR scenarios."
+    ],
+    "tre_looks_for": [
+      "Early detection (trend monitoring) and calm decision-making.",
+      "Correct use of backups and conservative planning.",
+      "Good communication: intentions and landing/diversion decisions."
+    ],
+    "common_pickups": [
+      "Not knowing the underlying trigger logic so diagnosis becomes guesswork.",
+      "Late fuel situation awareness in busy phases (holds/approaches)."
+    ],
+    "sim_patterns": [
+      "Fuel leak presented early in SPIFR; examiner watches how quickly you notice.",
+      "Cascading fuel filt → engine failure → forced handling."
+    ],
+    "drills": [
+      {
+        "label": "OPC Drill (Fuel tagged)",
+        "href": "../drill.html?tags=opc,fuel"
+      },
+      {
+        "label": "General fuel questions",
+        "href": "../drill.html?topics=General,Limitations&tags=fuel"
+      }
+    ]
+  },
+  {
+    "id": "fire",
+    "title": "Fire (engine / cabin) and end-state thinking",
+    "summary": [
+      "Know the sequence when pressing the fire button and what indications to expect.",
+      "Prioritise landing site selection while doing actions.",
+      "Don’t get trapped doing 'perfect' actions while failing to make a plan."
+    ],
+    "tre_looks_for": [
+      "Immediate actions done correctly and promptly.",
+      "Clear end-state: land ASAP where appropriate; justify decisions.",
+      "CRM: tell TFO/ATC early; manage workload."
+    ],
+    "common_pickups": [
+      "Delaying landing decision while completing checks.",
+      "Trying to cancel bells/tones that are non-cancellable."
+    ],
+    "sim_patterns": [
+      "Fire presented during a critical phase (VTOL1/approach) with limited options.",
+      "Fire combined with another system fault to force captaincy trade-offs."
+    ],
+    "drills": [
+      {
+        "label": "OPC Drill (Fire tagged)",
+        "href": "../drill.html?tags=opc,fire"
+      },
+      {
+        "label": "FRC fire-related",
+        "href": "../drill.html?tags=frc,fire"
+      }
+    ]
+  },
+  {
+    "id": "ifr_workcycle",
+    "title": "IFR / SPIFR workcycle (ForeFlight, RAIM, backup plan)",
+    "summary": [
+      "Always have Plan B if GPS fails (pre-load conventional aids).",
+      "RAIM check habit: early enough to matter.",
+      "Automation philosophy: let AP fly; you manage nav/fuel/briefs."
+    ],
+    "tre_looks_for": [
+      "Structured workflow, not head-down chaos.",
+      "Fuel plan awareness and cross-checks.",
+      "Correct mode choices (IAS vs ALTA/VS per local SOP)."
+    ],
+    "common_pickups": [
+      "Over-reliance on GPS; no manual nav plan.",
+      "Late RAIM check or no stated backup.",
+      "Mode confusion during go-around / re-position."
+    ],
+    "sim_patterns": [
+      "GPS failure mid-route; examiner expects HDG hold + needles.",
+      "Go-around confusion: flying the wrong missed approach for the phase."
+    ],
+    "drills": [
+      {
+        "label": "IF / GNSS drill",
+        "href": "../drill.html?tag=if"
+      },
+      {
+        "label": "Radio Nav drill",
+        "href": "../drill.html?topics=Radio%20Navigation,Radio%20Nav,GNSS"
+      }
+    ]
+  }
+]

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Drill · EC135 Revision</title>
+  <link rel="stylesheet" href="assets/style.css"/>
+</head>
+<body data-page="drill">
+<header>
+  <div class="row" style="justify-content:space-between">
+    <div>
+      <h1 id="drillTitle">Drill</h1>
+      <div class="sub"><span id="drillMeta">—</span> · <a href="index.html">Home</a> · <a href="opc/index.html">OPC Prep</a> · <a href="kb.html">Knowledge Bank</a></div>
+    </div>
+    <div class="row">
+      <button id="btn10">Quickfire 10</button>
+      <button id="btn30">Quickfire 30</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div style="font-weight:600">Quickfire</div>
+      <div class="pill" id="progress">—</div>
+    </div>
+
+    <div style="height:10px"></div>
+
+    <div class="row">
+      <label class="small"><input type="checkbox" id="toggleHidden"/> include Hidden</label>
+      <label class="small"><input type="checkbox" id="toggleMissed"/> only Missed</label>
+      <span class="small" id="missedCount">—</span>
+    </div>
+
+    <hr/>
+
+    <p class="bigq" id="qText">Loading…</p>
+    <div class="small" id="refText"></div>
+
+    <div id="answerBox" class="answer hidden">
+      <div style="font-weight:600; margin-bottom:6px">Answer</div>
+      <div id="aText"></div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="row">
+      <button id="btnReveal">Show / hide</button>
+      <button id="btnMiss">Missed</button>
+      <button id="btnNext">Next</button>
+      <button id="btnClearMissed">Clear missed</button>
+    </div>
+
+    <div style="height:12px"></div>
+    <div class="small">
+      Filters come from the URL. Examples:
+      <span class="kbd">drill.html?tag=opc</span>,
+      <span class="kbd">drill.html?tags=opc,frc,fadec</span>,
+      <span class="kbd">drill.html?topics=Emergency%20Actions,Limitations</span>,
+      <span class="kbd">drill.html?source=FRC</span>.
+    </div>
+  </div>
+</main>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

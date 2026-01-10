@@ -18,3 +18,7 @@ This is a simple, fast revision site that:
 ## Notes
 - Questions flagged as `status=needs_image` will show "needs image" in the metadata line.
 - Blank-topic rows are labelled `Uncategorised`.
+
+
+## Tags
+A new `tags` column exists in `data/qbank_clean.csv`. Use comma-separated tags such as `opc`, `frc`, `fadec`, `electrical`, `fuel`, `fire`, `afcs`, `if`.
