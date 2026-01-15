@@ -11,9 +11,10 @@
   <div class="row" style="justify-content:space-between">
     <div>
       <h1 id="topicTitle">Topic</h1>
-      <div class="sub"><span id="topicMeta">—</span> · <a href="index.html">Back to topics</a></div>
+      <div class="sub"><span id="topicMeta">—</span></div>
     </div>
     <div class="row">
+      <a class="btn" href="index.html">Back to topics</a>
       <button id="btn10">Quickfire 10</button>
       <button id="btn30">Quickfire 30</button>
     </div>
@@ -30,9 +31,21 @@
     <div style="height:10px"></div>
 
     <div class="row">
-      <label class="small"><input type="checkbox" id="toggleHidden"/> include Hidden</label>
-      <label class="small"><input type="checkbox" id="toggleFlagged"/> review flagged</label>
-<span class="small" id="flaggedCount">—</span>
+      <label class="small">
+        <input type="checkbox" id="toggleHidden"/>
+        include Hidden
+      </label>
+
+      <label class="small">
+        <input type="checkbox" id="toggleFlagged"/>
+        review flagged
+      </label>
+
+      <span class="small" id="flaggedCount">—</span>
+    </div>
+
+    <div class="small" style="margin-top:6px">
+      Flagged questions are saved on this device only (browser storage).
     </div>
 
     <hr/>
@@ -48,16 +61,13 @@
     <div style="height:12px"></div>
 
     <div class="row">
-  <a class="btn" href="index.html">Back to topics</a>
-  <button id="btnReveal">Show / hide</button>
-  <button id="btnPrev">Prev</button>
-  <button id="btnFlag">Flag</button>
-  <button id="btnNext">Next</button>
-  <button id="btnClearFlagged">Clear flagged</button>
-</div>
-
-    <div style="height:12px"></div>
-    <div class="small">Missed questions are saved in your browser only (localStorage).</div>
+      <a class="btn" href="index.html">Back to topics</a>
+      <button id="btnReveal">Show / hide</button>
+      <button id="btnPrev">Prev</button>
+      <button id="btnFlag">Flag</button>
+      <button id="btnNext">Next</button>
+      <button id="btnClearFlagged">Clear flagged</button>
+    </div>
   </div>
 </main>
 
