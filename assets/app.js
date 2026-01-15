@@ -46,7 +46,7 @@ async function initIndex(){
 
   function render(){
     const term = norm(q.value).toLowerCase();
-    const filtered = topics.filter(t => t.topic.toLowerCase().includes(term));
+    const filtered = topics.filter(t => (t.topic || "").toLowerCase().includes(term));
     grid.innerHTML = filtered.map(t => `
       <a class="card" href="topic.html?topic=${encodeURIComponent(t.topic)}">
         <div class="row" style="justify-content:space-between">
@@ -59,7 +59,7 @@ async function initIndex(){
     $("#count").textContent = `${filtered.length} topics`;
   }
 
-  q.addEventListener("input", render);
+  q?.addEventListener("input", render);
   render();
 }
 
@@ -77,32 +77,17 @@ async function initTopic(){
   let idx = 0;
   let showAnswer = false;
 
-  const missedKey = `missed:${topic}`;
-  let missed = new Set(getLocal(missedKey, []));
-
-  function applyFilters(){
-    const includeHidden = $("#toggleHidden").checked;
-    const onlyMissed = $("#toggleMissed").checked;
-
-    let d = filtered.slice();
-    // In this system, "Hidden" means "exclude from general users by default".
-    if(!includeHidden){
-      d = d.filter(r => norm(r.visibility).toLowerCase() !== "hidden");
-    }
-    if(onlyMissed){
-      d = d.filter(r => missed.has(norm(r.id)));
-    }
-    deck = shuffle(d);
-    idx = 0;
-    renderCard();
-  }
+  // Flagged = saved-for-later review list (local to this device/browser)
+  const flaggedKey = `flagged:${topic}`;
+  let flagged = new Set(getLocal(flaggedKey, []));
 
   function current(){ return deck[idx] || null; }
 
   function renderCard(){
     const r = current();
     showAnswer = false;
-    $("#answerBox").classList.add("hidden");
+    $("#answerBox")?.classList.add("hidden");
+
     if(!r){
       $("#qText").innerHTML = `<span class="small">No questions match these filters.</span>`;
       $("#aText").textContent = "";
@@ -110,8 +95,9 @@ async function initTopic(){
       $("#progress").textContent = `0 / 0`;
       return;
     }
-    $("#qText").textContent = r.question;
-    $("#aText").textContent = r.answer;
+
+    $("#qText").textContent = r.question || "";
+    $("#aText").textContent = r.answer || "";
 
     const meta = [];
     if(norm(r.id)) meta.push(`Q-${r.id}`);
@@ -123,58 +109,82 @@ async function initTopic(){
     $("#progress").textContent = `${idx + 1} / ${deck.length}`;
   }
 
-  $("#btnReveal").addEventListener("click", () => {
+  function applyFilters(){
+    const includeHidden = $("#toggleHidden")?.checked ?? false;
+    const onlyFlagged = $("#toggleFlagged")?.checked ?? false;
+
+    let d = filtered.slice();
+
+    // "Hidden" means excluded from general users by default.
+    if(!includeHidden){
+      d = d.filter(r => norm(r.visibility).toLowerCase() !== "hidden");
+    }
+
+    if(onlyFlagged){
+      d = d.filter(r => flagged.has(norm(r.id)));
+    }
+
+    deck = shuffle(d);
+    idx = 0;
+    renderCard();
+  }
+
+  // Controls
+  $("#btnReveal")?.addEventListener("click", () => {
     if(!current()) return;
     showAnswer = !showAnswer;
-    $("#answerBox").classList.toggle("hidden", !showAnswer);
+    $("#answerBox")?.classList.toggle("hidden", !showAnswer);
   });
 
-  $("#btnNext").addEventListener("click", () => {
+  $("#btnNext")?.addEventListener("click", () => {
     if(!current()) return;
     idx = (idx + 1) % deck.length;
     renderCard();
   });
 
-  $("#btnMiss").addEventListener("click", () => {
+  $("#btnPrev")?.addEventListener("click", () => {
+    if(!current()) return;
+    idx = (idx - 1 + deck.length) % deck.length;
+    renderCard();
+  });
+
+  $("#btnFlag")?.addEventListener("click", () => {
     const r = current();
     if(!r) return;
-    missed.add(norm(r.id));
-    setLocal(missedKey, Array.from(missed));
-    idx = (idx + 1) % deck.length;
-    renderCard();
-    $("#missedCount").textContent = `${missed.size} missed saved`;
+    flagged.add(norm(r.id));
+    setLocal(flaggedKey, Array.from(flagged));
+    $("#flaggedCount").textContent = `${flagged.size} flagged saved`;
   });
 
-  $("#btnClearMissed").addEventListener("click", () => {
-    missed = new Set();
-    setLocal(missedKey, []);
-    $("#missedCount").textContent = `0 missed saved`;
+  $("#btnClearFlagged")?.addEventListener("click", () => {
+    flagged = new Set();
+    setLocal(flaggedKey, []);
+    $("#flaggedCount").textContent = `0 flagged saved`;
     applyFilters();
   });
-$("#btnPrev").addEventListener("click", () => {
-  if(!current()) return;
-  idx = (idx - 1 + deck.length) % deck.length;
-  renderCard();
-});
 
-  $("#toggleHidden").addEventListener("change", applyFilters);
-  $("#toggleMissed").addEventListener("change", applyFilters);
+  $("#toggleHidden")?.addEventListener("change", applyFilters);
+  $("#toggleFlagged")?.addEventListener("change", applyFilters);
 
   function setSize(n){
-    const includeHidden = $("#toggleHidden").checked;
-    const onlyMissed = $("#toggleMissed").checked;
+    const includeHidden = $("#toggleHidden")?.checked ?? false;
+    const onlyFlagged = $("#toggleFlagged")?.checked ?? false;
+
     let d = filtered.slice();
     if(!includeHidden) d = d.filter(r => norm(r.visibility).toLowerCase() !== "hidden");
-    if(onlyMissed) d = d.filter(r => missed.has(norm(r.id)));
+    if(onlyFlagged) d = d.filter(r => flagged.has(norm(r.id)));
+
     d = shuffle(d).slice(0, n);
     deck = d;
     idx = 0;
     renderCard();
   }
-  $("#btn10").addEventListener("click", () => setSize(10));
-  $("#btn30").addEventListener("click", () => setSize(30));
 
-  $("#missedCount").textContent = `${missed.size} missed saved`;
+  $("#btn10")?.addEventListener("click", () => setSize(10));
+  $("#btn30")?.addEventListener("click", () => setSize(30));
+
+  // Initial
+  $("#flaggedCount").textContent = `${flagged.size} flagged saved`;
   applyFilters();
 }
 
@@ -183,3 +193,4 @@ document.addEventListener("DOMContentLoaded", () => {
   if(page === "index") initIndex().catch(err => alert(err.message));
   if(page === "topic") initTopic().catch(err => alert(err.message));
 });
+
