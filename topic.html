@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Topic · EC135 Revision</title>
+  <title>Topic · EC135 Question Bank</title>
   <link rel="stylesheet" href="assets/style.css"/>
 </head>
 <body data-page="topic">
@@ -11,7 +11,7 @@
   <div class="row" style="justify-content:space-between">
     <div>
       <h1 id="topicTitle">Topic</h1>
-      <div class="sub"><span id="topicMeta">—</span> · <a href="kb.html">Back to Knowledge Bank</a> · <a href="index.html">Home</a></div>
+      <div class="sub"><span id="topicMeta">—</span> · <a href="index.html">Back to topics</a></div>
     </div>
     <div class="row">
       <button id="btn10">Quickfire 10</button>
@@ -21,62 +21,41 @@
 </header>
 
 <main>
-  <div class="grid" style="grid-template-columns: 1.1fr 0.9fr;">
-    <div class="card">
-      <div style="font-weight:600">Brain-load</div>
-      <div class="small">Keep this short: “10 things to remember”. (We can add topic_hints.json later.)</div>
-      <hr/>
-      <ul class="small">
-        <li>Add compressed notes for this topic.</li>
-        <li>Keep to behaviours + key numbers.</li>
-        <li>Link to FRC card refs where useful.</li>
-      </ul>
-
-      <div style="height:10px"></div>
-      <div style="font-weight:600">Common sim / check issues</div>
-      <div class="small">Pulled from any “notes” fields in the question bank, if present.</div>
-      <hr/>
-      <ul id="simHints" class="small"></ul>
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div style="font-weight:600">Quickfire</div>
+      <div class="pill" id="progress">—</div>
     </div>
 
-    <div class="card">
-      <div class="row" style="justify-content:space-between">
-        <div style="font-weight:600">Quickfire</div>
-        <div class="pill" id="progress">—</div>
-      </div>
+    <div style="height:10px"></div>
 
-      <div style="height:10px"></div>
-
-      <div class="row">
-        <label class="small"><input type="checkbox" id="toggleHidden"/> include Hidden</label>
-        <label class="small"><input type="checkbox" id="toggleMissed"/> only Missed</label>
-      </div>
-      <div class="small" id="missedCount" style="margin-top:6px">—</div>
-
-      <hr/>
-
-      <p class="bigq" id="qText">Loading…</p>
-      <div class="small" id="refText"></div>
-
-      <div id="answerBox" class="answer hidden">
-        <div style="font-weight:600; margin-bottom:6px">Answer</div>
-        <div id="aText"></div>
-      </div>
-
-      <div style="height:12px"></div>
-
-      <div class="row">
-        <button id="btnReveal">Show / hide</button>
-        <button id="btnMiss">Missed</button>
-        <button id="btnNext">Next</button>
-      </div>
-
-      <div style="height:10px"></div>
-      <button id="btnClearMissed">Clear missed for this topic</button>
-
-      <div style="height:12px"></div>
-      <div class="small">Missed questions are saved in your browser only (localStorage).</div>
+    <div class="row">
+      <label class="small"><input type="checkbox" id="toggleHidden"/> include Hidden</label>
+      <label class="small"><input type="checkbox" id="toggleMissed"/> only Missed</label>
+      <span class="small" id="missedCount">—</span>
     </div>
+
+    <hr/>
+
+    <p class="bigq" id="qText">Loading…</p>
+    <div class="small" id="refText"></div>
+
+    <div id="answerBox" class="answer hidden">
+      <div style="font-weight:600; margin-bottom:6px">Answer</div>
+      <div id="aText"></div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="row">
+      <button id="btnReveal">Show / hide</button>
+      <button id="btnMiss">Missed</button>
+      <button id="btnNext">Next</button>
+      <button id="btnClearMissed">Clear missed</button>
+    </div>
+
+    <div style="height:12px"></div>
+    <div class="small">Missed questions are saved in your browser only (localStorage).</div>
   </div>
 </main>
 

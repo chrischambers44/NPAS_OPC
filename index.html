@@ -3,46 +3,39 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>EC135 Revision</title>
+  <title>EC135 Question Bank</title>
   <link rel="stylesheet" href="assets/style.css"/>
 </head>
-<body>
+<body data-page="index">
 <header>
-  <h1>EC135 Revision</h1>
-  <div class="sub">Two tracks: OPC-specific preparation and general knowledge.</div>
+  <h1>EC135 Question Bank</h1>
+  <div class="sub">Topic-based revision. Answers are always hidden until you reveal them.</div>
 </header>
 
 <main>
-  <div class="grid">
-    <a class="card" href="opc/index.html">
-      <div class="row" style="justify-content:space-between">
-        <div style="font-weight:700">OPC Prep</div>
-        <span class="pill">FRC + TRE + sim</span>
-      </div>
-      <div class="small" style="margin-top:8px">
-        Brain-load modules, common pick-ups, TRE expectations, scenario reps, curated drills.
-      </div>
-    </a>
-
-    <a class="card" href="kb.html">
-      <div class="row" style="justify-content:space-between">
-        <div style="font-weight:700">Knowledge Bank</div>
-        <span class="pill">Q-bank</span>
-      </div>
-      <div class="small" style="margin-top:8px">
-        Your systems / tech-guide question bank by topic. Quickfire and “missed” tracking.
-      </div>
-    </a>
-  </div>
-
-  <div style="height:16px"></div>
-
   <div class="card">
-    <div style="font-weight:600">Tip</div>
-    <div class="small" style="margin-top:6px">
-      To curate OPC drills, edit <span class="kbd">data/qbank_clean.csv</span> and add comma-separated values in the new <span class="kbd">tags</span> column (e.g. <span class="kbd">opc,frc,fadec</span>).
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div style="font-weight:600">Pick a topic</div>
+        <div class="small">Search → open topic → quickfire.</div>
+      </div>
+      <div class="pill" id="count">—</div>
+    </div>
+    <hr/>
+    <div class="row">
+      <input id="search" type="search" placeholder="Search topics (e.g., Powerplant, GNSS, Limitations)"/>
+      <a class="btn" href="topic.html?topic=Uncategorised">Uncategorised</a>
+    </div>
+    <div class="small" style="margin-top:10px">
+      Admin: edit <span class="kbd">data/qbank_clean.csv</span>. JSON is auto-built by GitHub Actions (see <span class="kbd">.github/workflows/build-qbank.yml</span>).
     </div>
   </div>
+
+  <div style="height:12px"></div>
+
+  <div class="grid" id="topicGrid"></div>
 </main>
+
+<script src="assets/app.js"></script>
 </body>
 </html>

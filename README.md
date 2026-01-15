@@ -1,24 +1,24 @@
-# EC135 Revision (OPC Prep) — static GitHub Pages starter
+# EC135 Question Bank (GitHub Pages)
 
-This is a simple, fast revision site that:
-- groups questions by **Topic** (from the CSV)
-- provides a **Quickfire** mode (10 / 30 / randomised)
-- stores *Missed* questions locally in your browser (no accounts)
+A simple, fast, topic-based revision question bank.
 
-## Data files
-- `data/qbank_clean.csv`  ← edit this as your master
-- `data/qbank.json`       ← generated from the CSV (site loads this)
-- `data/topics.json`      ← generated topic counts
+## Use
+- Open the site
+- Pick a topic
+- Quickfire 10 / 30
+- Reveal answer when ready
 
-## Editing workflow (simple)
-1. Edit `data/qbank_clean.csv`
-2. Rebuild `data/qbank.json` and `data/topics.json` using a small script (we can add one)
-3. Commit and push — GitHub Pages updates
+## Admin (single source of truth)
+Edit: `data/qbank_clean.csv`
 
-## Notes
-- Questions flagged as `status=needs_image` will show "needs image" in the metadata line.
-- Blank-topic rows are labelled `Uncategorised`.
+A GitHub Action automatically regenerates:
+- `data/qbank.json`
+- `data/topics.json`
 
+Workflow: `.github/workflows/build-qbank.yml`
 
-## Tags
-A new `tags` column exists in `data/qbank_clean.csv`. Use comma-separated tags such as `opc`, `frc`, `fadec`, `electrical`, `fuel`, `fire`, `afcs`, `if`.
+## What does "Hidden" mean?
+In this system, `visibility=Hidden` means **excluded from general users by default**.
+On topic pages, users can opt-in via **include Hidden**.
+
+This replaces the old FileMaker "reveal answer by unchecking" behaviour, which is now handled by the **Show / hide** button.

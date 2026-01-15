@@ -37,7 +37,7 @@
   },
   {
     "topic": "Lifting System",
-    "count": 26
+    "count": 25
   },
   {
     "topic": "NPAS SOPs",
@@ -76,11 +76,11 @@
     "count": 2
   },
   {
-    "topic": "Mass and Loading",
+    "topic": "Flight Control",
     "count": 1
   },
   {
-    "topic": "Flight Control",
+    "topic": "Mass and Loading",
     "count": 1
   }
 ]
