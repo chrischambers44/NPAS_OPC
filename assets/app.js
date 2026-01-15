@@ -151,6 +151,11 @@ async function initTopic(){
     $("#missedCount").textContent = `0 missed saved`;
     applyFilters();
   });
+$("#btnPrev").addEventListener("click", () => {
+  if(!current()) return;
+  idx = (idx - 1 + deck.length) % deck.length;
+  renderCard();
+});
 
   $("#toggleHidden").addEventListener("change", applyFilters);
   $("#toggleMissed").addEventListener("change", applyFilters);
