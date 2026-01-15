@@ -31,8 +31,8 @@
 
     <div class="row">
       <label class="small"><input type="checkbox" id="toggleHidden"/> include Hidden</label>
-      <label class="small"><input type="checkbox" id="toggleMissed"/> only Missed</label>
-      <span class="small" id="missedCount">—</span>
+      <label class="small"><input type="checkbox" id="toggleFlagged"/> review flagged</label>
+<span class="small" id="flaggedCount">—</span>
     </div>
 
     <hr/>
@@ -48,11 +48,13 @@
     <div style="height:12px"></div>
 
     <div class="row">
-      <button id="btnReveal">Show / hide</button>
-      <button id="btnMiss">Missed</button>
-      <button id="btnNext">Next</button>
-      <button id="btnClearMissed">Clear missed</button>
-    </div>
+  <a class="btn" href="index.html">Back to topics</a>
+  <button id="btnReveal">Show / hide</button>
+  <button id="btnPrev">Prev</button>
+  <button id="btnFlag">Flag</button>
+  <button id="btnNext">Next</button>
+  <button id="btnClearFlagged">Clear flagged</button>
+</div>
 
     <div style="height:12px"></div>
     <div class="small">Missed questions are saved in your browser only (localStorage).</div>
