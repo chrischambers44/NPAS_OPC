@@ -8212,7 +8212,7 @@
     "topic": "Flight Control",
     "variant": "P2+",
     "question": "Explain the purpose and features of the collective override stop?",
-    "answer": "The coll pitch travel is limited by an override stop\u000b\u000bIn the event of an emergency, if inc pitch is required, the stop can be exceeded. The required override control force is approx 5.6 lbs (25 newton)",
+    "answer": "The coll pitch travel is limited by an override stop. In the event of an emergency, if inc pitch is required, the stop can be exceeded. The required override control force is approx 5.6 lbs (25 newton)",
     "ref": "2 - 17",
     "source": "P2+ FLM",
     "visibility": "Reveal",
