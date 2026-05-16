@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pilot's Notes Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #161a23;
+    --surface2: #1e2433;
+    --border: #2a3045;
+    --accent: #e8b84b;
+    --accent2: #4b8fe8;
+    --correct: #3ecf6e;
+    --wrong: #e85050;
+    --text: #e8ecf4;
+    --text2: #8a94aa;
+    --text3: #555f7a;
+    --radius: 16px;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; min-height: 100vh; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  /* ── HOME ── */
+  #home {
+    background: var(--bg);
+    padding: 0;
+  }
+
+  .home-header {
+    background: linear-gradient(160deg, #1a2035 0%, #0d0f14 60%);
+    padding: 48px 24px 32px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .home-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(232,184,75,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(232,184,75,0.12);
+    border: 1px solid rgba(232,184,75,0.3);
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+
+  .home-title {
+    font-family: var(--font-display);
+    font-size: 52px;
+    line-height: 0.95;
+    letter-spacing: 1px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .home-title span { color: var(--accent); }
+
+  .home-sub {
+    font-size: 14px;
+    color: var(--text2);
+    font-weight: 300;
+    margin-top: 12px;
+  }
+
+  .home-body {
+    padding: 24px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 4px;
+    margin-top: 8px;
+  }
+
+  /* Selects */
+  .select-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .select-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .select-group.full { grid-column: 1 / -1; }
+
+  select, .qty-row input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a94aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    cursor: pointer;
+  }
+
+  select:focus { outline: none; border-color: var(--accent); }
+
+  .qty-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .qty-btn {
+    background: var(--surface2);
+    border: none;
+    color: var(--text);
+    font-size: 20px;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+
+  .qty-btn:active { background: var(--border); }
+
+  .qty-display {
+    flex: 1;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--accent);
+    padding: 12px;
+    user-select: none;
+  }
+
+  /* Depth pills */
+  .pill-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .pill.active {
+    background: rgba(232,184,75,0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 10px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat-item {
+    flex: 1;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 28px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+    font-family: var(--font-mono);
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 16px 24px;
+    border-radius: var(--radius);
+    border: none;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.3px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0d0f14;
+  }
+
+  .btn-primary:active { transform: scale(0.98); background: #d4a43a; }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:active { background: var(--border); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid rgba(232,184,75,0.4);
+  }
+
+  .btn-outline:active { background: rgba(232,184,75,0.1); }
+
+  .btn-sm {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-radius: 10px;
+    width: auto;
+  }
+
+  /* ── QUIZ SCREEN ── */
+  #quiz { background: var(--bg); }
+
+  .quiz-header {
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--text2);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  .quiz-progress-text {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .score-badge {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    background: rgba(232,184,75,0.12);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+
+  .quiz-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .meta-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .meta-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text3);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .meta-tag.depth-basic { color: var(--correct); border-color: rgba(62,207,110,0.3); background: rgba(62,207,110,0.08); }
+  .meta-tag.depth-intermediate { color: var(--accent); border-color: rgba(232,184,75,0.3); background: rgba(232,184,75,0.08); }
+  .meta-tag.depth-advanced { color: var(--accent2); border-color: rgba(75,143,232,0.3); background: rgba(75,143,232,0.08); }
+
+  /* Flashcard */
+  .card {
+    flex: 1;
+    min-height: 280px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .card.revealed {
+    border-color: rgba(232,184,75,0.3);
+    background: #181d2a;
+  }
+
+  .card.correct-flash { border-color: var(--correct); background: rgba(62,207,110,0.06); }
+  .card.wrong-flash { border-color: var(--wrong); background: rgba(232,80,80,0.06); }
+
+  .card-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 16px;
+  }
+
+  .card.revealed .card-label { color: var(--accent); }
+
+  .card-text {
+    font-size: 18px;
+    line-height: 1.55;
+    font-weight: 400;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .card-answer {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .card-ref {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  .tap-hint {
+    position: absolute;
+    bottom: 16px;
+    right: 20px;
+    font-size: 11px;
+    color: var(--text3);
+    font-family: var(--font-mono);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Answer buttons */
+  .answer-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .btn-correct {
+    background: rgba(62,207,110,0.15);
+    color: var(--correct);
+    border: 1px solid rgba(62,207,110,0.4);
+    padding: 16px;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .btn-correct:active { background: rgba(62,207,110,0.25); }
+
+  .btn-wrong {
+    background: rgba(232,80,80,0.15);
+    color: var(--wrong);
+    border: 1px solid rgba(232,80,80,0.4);
+    padding: 16px;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .btn-wrong:active { background: rgba(232,80,80,0.25); }
+
+  .flag-row {
+    display: flex;
+    justify-content: center;
+  }
+
+  .btn-flag {
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-size: 12px;
+    font-family: var(--font-mono);
+    cursor: pointer;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s;
+  }
+
+  .btn-flag:hover { color: var(--accent); }
+  .btn-flag.flagged { color: var(--accent); }
+
+  /* ── RESULTS SCREEN ── */
+  #results { background: var(--bg); }
+
+  .results-header {
+    padding: 48px 24px 24px;
+    background: linear-gradient(160deg, #1a2035 0%, #0d0f14 60%);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .results-score-ring {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+
+  .results-score-ring svg { transform: rotate(-90deg); }
+
+  .results-score-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .results-pct {
+    font-family: var(--font-display);
+    font-size: 36px;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .results-label-sm {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: var(--font-mono);
+    letter-spacing: 1px;
+  }
+
+  .results-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    margin-bottom: 6px;
+  }
+
+  .results-sub {
+    font-size: 14px;
+    color: var(--text2);
+  }
+
+  .results-stats {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .r-stat {
+    flex: 1;
+    padding: 20px 16px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+
+  .r-stat:last-child { border-right: none; }
+
+  .r-stat-num {
+    font-family: var(--font-display);
+    font-size: 32px;
+    line-height: 1;
+  }
+
+  .r-stat-num.c { color: var(--correct); }
+  .r-stat-num.w { color: var(--wrong); }
+  .r-stat-num.f { color: var(--accent); }
+
+  .r-stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  .review-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+  }
+
+  .review-section-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 12px 0 8px;
+  }
+
+  .review-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-left: 3px solid transparent;
+  }
+
+  .review-item.correct { border-left-color: var(--correct); }
+  .review-item.wrong { border-left-color: var(--wrong); }
+  .review-item.flagged-item { border-left-color: var(--accent); }
+
+  .review-q {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .review-a {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .review-ref {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 6px;
+  }
+
+  .results-actions {
+    padding: 16px 20px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── PDF SCREEN ── */
+  #pdfgen { background: var(--bg); }
+
+  .pdf-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .pdf-header h2 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+
+  .pdf-header p {
+    font-size: 13px;
+    color: var(--text2);
+  }
+
+  .pdf-body {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+  }
+
+  .pdf-preview {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .pdf-preview-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+
+  .pdf-preview-content {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  /* Loading */
+  .loading-screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,15,20,0.9);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .loading-screen.active { display: flex; }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text2);
+    letter-spacing: 2px;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: var(--font-mono);
+    transition: transform 0.3s ease;
+    z-index: 200;
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Error */
+  .error-box {
+    background: rgba(232,80,80,0.1);
+    border: 1px solid rgba(232,80,80,0.3);
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 13px;
+    color: #e85050;
+    display: none;
+  }
+
+  .error-box.active { display: block; }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0;
+  }
+
+  /* Bottom safe area */
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 16px); }
+
+  /* Swipe card animation */
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .card.enter { animation: slideInRight 0.25s ease; }
+
+  /* Pulse on reveal */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.01); }
+    100% { transform: scale(1); }
+  }
+
+  .card.pulse { animation: pulse 0.2s ease; }
+
+  /* Text input for quiz title */
+  .text-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    width: 100%;
+  }
+
+  .text-input:focus { outline: none; border-color: var(--accent); }
+
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="spinner"></div>
+  <div class="loading-text">LOADING QUESTIONS</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: HOME
+════════════════════════════════════════════════ -->
+<div class="screen active" id="home">
+
+  <div class="home-header">
+    <div class="badge">NPAS · EC135 / EC145</div>
+    <div class="home-title">PILOT'S<br>NOTES <span>QUIZ</span></div>
+    <div class="home-sub">Tap a question. Recall. Reveal. Repeat.</div>
+  </div>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item">
+      <div class="stat-num" id="totalQCount">—</div>
+      <div class="stat-label">Questions</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="catCount">—</div>
+      <div class="stat-label">Categories</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="acCount">—</div>
+      <div class="stat-label">Aircraft</div>
+    </div>
+  </div>
+
+  <div class="home-body">
+
+    <div class="error-box" id="errorBox">
+      ⚠ Could not load question bank. Check your sheet URL below.<br><br>
+      <span id="errorDetail" style="opacity:0.7;font-size:11px;"></span>
+    </div>
+
+    <div class="section-label">Aircraft</div>
+    <div class="select-group">
+      <select id="filterAircraft">
+        <option value="all">All aircraft</option>
+      </select>
+    </div>
+
+    <div class="select-row">
+      <div class="select-group">
+        <div class="section-label">Category</div>
+        <select id="filterCategory">
+          <option value="all">All categories</option>
+        </select>
+      </div>
+      <div class="select-group">
+        <div class="section-label">Depth</div>
+        <select id="filterDepth">
+          <option value="all">Any depth</option>
+          <option value="Basic">Basic</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section-label">Questions</div>
+    <div class="qty-row">
+      <button class="qty-btn" onclick="changeQty(-5)">−</button>
+      <div class="qty-display" id="qtyDisplay">20</div>
+      <button class="qty-btn" onclick="changeQty(5)">+</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <button class="btn btn-primary" onclick="startQuiz()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2l10 6-10 6V2z" fill="currentColor"/></svg>
+      Start Quiz
+    </button>
+
+    <button class="btn btn-secondary" onclick="showPDF()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="1" width="10" height="14" rx="1.5" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="5" x2="10" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="6" y1="8" x2="10" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="6" y1="11" x2="8" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Generate Paper Quiz (PDF)
+    </button>
+
+    <div style="margin-top:4px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius:10px;">
+      <div class="section-label" style="margin:0 0 8px;">Google Sheet URL (CSV export)</div>
+      <input type="text" class="text-input" id="sheetUrl" placeholder="Paste your published CSV URL here…" style="font-size:12px;">
+      <div style="margin-top:8px;">
+        <button class="btn btn-outline btn-sm" onclick="reloadSheet()">↻ Reload from sheet</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="safe-bottom"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: QUIZ
+════════════════════════════════════════════════ -->
+<div class="screen" id="quiz">
+
+  <div class="quiz-header">
+    <button class="back-btn" onclick="confirmExit()">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="quiz-progress-text" id="progressText">Q 1 of 20</div>
+    <div class="score-badge" id="scoreBadge">0 / 0</div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <div class="quiz-body">
+
+    <div class="meta-tags" id="metaTags"></div>
+
+    <!-- Card (tap to reveal) -->
+    <div class="card enter" id="flashcard" onclick="revealAnswer()">
+      <div class="card-label" id="cardLabel">QUESTION</div>
+      <div class="card-text" id="cardText"></div>
+      <div class="tap-hint" id="tapHint">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v5M6 6l3-3M6 6L3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="10" r="1" fill="currentColor"/></svg>
+        tap to reveal
+      </div>
+    </div>
+
+    <!-- Answer buttons (hidden until revealed) -->
+    <div class="answer-btns" id="answerBtns" style="display:none;">
+      <button class="btn-wrong" onclick="markAnswer(false)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Missed it
+      </button>
+      <button class="btn-correct" onclick="markAnswer(true)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Got it
+      </button>
+    </div>
+
+    <div class="flag-row" id="flagRow" style="display:none;">
+      <button class="btn-flag" id="flagBtn" onclick="flagQuestion()">
+        ⚑ Flag this question
+      </button>
+    </div>
+
+  </div>
+  <div class="safe-bottom"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: RESULTS
+════════════════════════════════════════════════ -->
+<div class="screen" id="results">
+
+  <div class="results-header">
+    <div class="results-score-ring">
+      <svg width="120" height="120" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#2a3045" stroke-width="8"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#e8b84b" stroke-width="8"
+          stroke-dasharray="314" id="scoreCircle" stroke-dashoffset="314"
+          stroke-linecap="round" style="transition: stroke-dashoffset 1s ease;"/>
+      </svg>
+      <div class="results-score-text">
+        <div class="results-pct" id="resultsPct">0%</div>
+        <div class="results-label-sm">SCORE</div>
+      </div>
+    </div>
+    <div class="results-title" id="resultsTitle">Session Complete</div>
+    <div class="results-sub" id="resultsSub"></div>
+  </div>
+
+  <div class="results-stats">
+    <div class="r-stat">
+      <div class="r-stat-num c" id="rCorrect">0</div>
+      <div class="r-stat-label">Correct</div>
+    </div>
+    <div class="r-stat">
+      <div class="r-stat-num w" id="rWrong">0</div>
+      <div class="r-stat-label">Missed</div>
+    </div>
+    <div class="r-stat">
+      <div class="r-stat-num f" id="rFlagged">0</div>
+      <div class="r-stat-label">Flagged</div>
+    </div>
+  </div>
+
+  <div class="review-list" id="reviewList"></div>
+
+  <div class="results-actions safe-bottom">
+    <button class="btn btn-primary" onclick="startQuiz()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 1.5l8 5.5-8 5.5V1.5z" fill="currentColor"/></svg>
+      New Session
+    </button>
+    <button class="btn btn-secondary" onclick="showScreen('home')">← Back to Menu</button>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: PDF GENERATOR
+════════════════════════════════════════════════ -->
+<div class="screen" id="pdfgen">
+
+  <div class="pdf-header">
+    <h2>Paper Quiz</h2>
+    <p>Generate a printable question sheet for training days</p>
+  </div>
+
+  <div class="pdf-body">
+
+    <div class="section-label">Quiz Title</div>
+    <input type="text" class="text-input" id="pdfTitle" value="Pilot's Notes Quiz" placeholder="Quiz title…">
+
+    <div class="section-label">Aircraft Filter</div>
+    <select id="pdfAircraft" class="text-input" style="background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a94aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\"); background-repeat:no-repeat; background-position: right 14px center; appearance:none;">
+      <option value="all">All aircraft</option>
+    </select>
+
+    <div class="section-label">Category</div>
+    <select id="pdfCategory" class="text-input" style="background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a94aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\"); background-repeat:no-repeat; background-position: right 14px center; appearance:none;">
+      <option value="all">All categories</option>
+    </select>
+
+    <div class="section-label">Number of Questions</div>
+    <div class="qty-row">
+      <button class="qty-btn" onclick="changePdfQty(-5)">−</button>
+      <div class="qty-display" id="pdfQtyDisplay">20</div>
+      <button class="qty-btn" onclick="changePdfQty(5)">+</button>
+    </div>
+
+    <div class="section-label">Format</div>
+    <div class="pill-row">
+      <div class="pill active" id="pillQOnly" onclick="setPdfFormat('q')">Questions only</div>
+      <div class="pill" id="pillQA" onclick="setPdfFormat('qa')">With answers</div>
+    </div>
+
+    <div class="pdf-preview" id="pdfPreview">
+      <div class="pdf-preview-title">Preview</div>
+      <div class="pdf-preview-content" id="pdfPreviewContent">Select options above to preview</div>
+    </div>
+
+    <button class="btn btn-primary" onclick="generatePDF()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Download PDF
+    </button>
+
+    <button class="btn btn-secondary" onclick="showScreen('home')">← Back to Menu</button>
+
+  </div>
+  <div class="safe-bottom"></div>
+</div>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let allQuestions = [];
+let sessionQuestions = [];
+let currentIdx = 0;
+let sessionResults = [];  // {question, correct, flagged}
+let revealed = false;
+let qtyValue = 20;
+let pdfQtyValue = 20;
+let pdfFormat = 'q';
+
+// ═══════════════════════════════════════════════
+// SHEET URL — paste your published CSV URL here as default
+// ═══════════════════════════════════════════════
+const DEFAULT_SHEET_URL = ''; // e.g. https://docs.google.com/spreadsheets/d/XXXXX/export?format=csv
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('pnq_sheet_url') || DEFAULT_SHEET_URL;
+  if (saved) document.getElementById('sheetUrl').value = saved;
+  if (saved) loadSheet(saved);
+  else showError('No sheet URL configured. Paste your Google Sheets CSV URL above.');
+
+  updatePdfPreview();
+});
+
+// ═══════════════════════════════════════════════
+// LOAD SHEET
+// ═══════════════════════════════════════════════
+function reloadSheet() {
+  const url = document.getElementById('sheetUrl').value.trim();
+  if (!url) { showError('Please paste a Google Sheets CSV export URL.'); return; }
+  localStorage.setItem('pnq_sheet_url', url);
+  loadSheet(url);
+}
+
+function loadSheet(url) {
+  showLoading(true);
+  hideError();
+
+  // Handle all Google Sheets URL variants → convert to CSV export
+  let fetchUrl = url;
+  if (url.includes('docs.google.com/spreadsheets')) {
+    if (url.includes('pubhtml')) {
+      // Published HTML → swap to CSV
+      fetchUrl = url.replace('pubhtml', 'pub?output=csv');
+    } else if (url.includes('/pub?') && !url.includes('output=csv')) {
+      // Published but wrong format
+      fetchUrl = url.replace('/pub?', '/pub?output=csv&');
+    } else if (!url.includes('pub?output=csv') && !url.includes('export?format=csv')) {
+      // Regular share URL → use export
+      const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match) {
+        fetchUrl = `https://docs.google.com/spreadsheets/d/${match[1]}/export?format=csv`;
+      }
+    }
+  }
+
+  fetch(fetchUrl)
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.text();
+    })
+    .then(csv => {
+      allQuestions = parseCSV(csv);
+      showLoading(false);
+      if (allQuestions.length === 0) {
+        showError('No questions found. Check the sheet has headers: ID, Aircraft, Category, Question, Answer, Source, Ref, Active, Depth');
+        return;
+      }
+      populateFilters();
+      updateStats();
+    })
+    .catch(err => {
+      showLoading(false);
+      showError(`Could not fetch sheet: ${err.message}. Make sure the sheet is published as CSV (File → Share → Publish to web → CSV).`);
+    });
+}
+
+// ═══════════════════════════════════════════════
+// CSV PARSER
+// ═══════════════════════════════════════════════
+function parseCSV(csv) {
+  const lines = csv.split('\n').filter(l => l.trim());
+  if (lines.length < 2) return [];
+
+  const headers = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase().replace(/[^a-z0-9]/g,'_'));
+
+  return lines.slice(1).map(line => {
+    const vals = parseCSVLine(line);
+    const obj = {};
+    headers.forEach((h, i) => { obj[h] = (vals[i] || '').trim(); });
+    return obj;
+  }).filter(q => q.question && q.answer && (q.active || '').toLowerCase() !== 'no');
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let cur = '';
+  let inQuote = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQuote && line[i+1] === '"') { cur += '"'; i++; }
+      else { inQuote = !inQuote; }
+    } else if (c === ',' && !inQuote) {
+      result.push(cur); cur = '';
+    } else {
+      cur += c;
+    }
+  }
+  result.push(cur);
+  return result;
+}
+
+// ═══════════════════════════════════════════════
+// FILTERS & STATS
+// ═══════════════════════════════════════════════
+function populateFilters() {
+  const aircraft = [...new Set(allQuestions.map(q => q.aircraft).filter(Boolean))].sort();
+  const categories = [...new Set(allQuestions.map(q => q.category).filter(Boolean))].sort();
+
+  const acSel = document.getElementById('filterAircraft');
+  const catSel = document.getElementById('filterCategory');
+  const pdfAcSel = document.getElementById('pdfAircraft');
+  const pdfCatSel = document.getElementById('pdfCategory');
+
+  [acSel, pdfAcSel].forEach(sel => {
+    sel.innerHTML = '<option value="all">All aircraft</option>';
+    aircraft.forEach(a => { sel.innerHTML += `<option value="${a}">${a}</option>`; });
+  });
+
+  [catSel, pdfCatSel].forEach(sel => {
+    sel.innerHTML = '<option value="all">All categories</option>';
+    categories.forEach(c => { sel.innerHTML += `<option value="${c}">${c}</option>`; });
+  });
+}
+
+function getFilteredQuestions(acFilter, catFilter, depthFilter) {
+  return allQuestions.filter(q => {
+    if (acFilter !== 'all' && q.aircraft !== acFilter && q.aircraft !== 'All') return false;
+    if (catFilter !== 'all' && q.category !== catFilter) return false;
+    if (depthFilter !== 'all' && q.depth !== depthFilter) return false;
+    return true;
+  });
+}
+
+function updateStats() {
+  const aircraft = [...new Set(allQuestions.map(q => q.aircraft).filter(Boolean))];
+  const cats = [...new Set(allQuestions.map(q => q.category).filter(Boolean))];
+  document.getElementById('totalQCount').textContent = allQuestions.length;
+  document.getElementById('catCount').textContent = cats.length;
+  document.getElementById('acCount').textContent = aircraft.length;
+}
+
+// ═══════════════════════════════════════════════
+// QUIZ
+// ═══════════════════════════════════════════════
+function startQuiz() {
+  const ac = document.getElementById('filterAircraft').value;
+  const cat = document.getElementById('filterCategory').value;
+  const depth = document.getElementById('filterDepth').value;
+
+  let pool = getFilteredQuestions(ac, cat, depth);
+  if (pool.length === 0) {
+    showToast('No questions match those filters');
+    return;
+  }
+
+  // Shuffle and take qty
+  pool = shuffle(pool);
+  sessionQuestions = pool.slice(0, Math.min(qtyValue, pool.length));
+  currentIdx = 0;
+  sessionResults = [];
+
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = sessionQuestions[currentIdx];
+  const total = sessionQuestions.length;
+  revealed = false;
+
+  // Header
+  document.getElementById('progressText').textContent = `Q ${currentIdx + 1} of ${total}`;
+  const correct = sessionResults.filter(r => r.correct).length;
+  document.getElementById('scoreBadge').textContent = `${correct} / ${currentIdx}`;
+  document.getElementById('progressFill').style.width = `${(currentIdx / total) * 100}%`;
+
+  // Meta tags
+  const tags = document.getElementById('metaTags');
+  const depthClass = (q.depth || '').toLowerCase();
+  tags.innerHTML = `
+    ${q.aircraft ? `<span class="meta-tag">${q.aircraft}</span>` : ''}
+    ${q.category ? `<span class="meta-tag">${q.category}</span>` : ''}
+    ${q.depth ? `<span class="meta-tag depth-${depthClass}">${q.depth}</span>` : ''}
+  `;
+
+  // Card
+  const card = document.getElementById('flashcard');
+  card.className = 'card enter';
+  card.onclick = revealAnswer;
+  document.getElementById('cardLabel').textContent = 'QUESTION';
+  document.getElementById('cardText').textContent = q.question;
+  document.getElementById('tapHint').style.display = 'flex';
+
+  document.getElementById('answerBtns').style.display = 'none';
+  document.getElementById('flagRow').style.display = 'none';
+
+  const flagBtn = document.getElementById('flagBtn');
+  flagBtn.className = 'btn-flag';
+  flagBtn.textContent = '⚑ Flag this question';
+}
+
+function revealAnswer() {
+  if (revealed) return;
+  revealed = true;
+
+  const q = sessionQuestions[currentIdx];
+  const card = document.getElementById('flashcard');
+
+  card.className = 'card revealed pulse';
+  card.onclick = null;
+
+  document.getElementById('cardLabel').textContent = 'ANSWER';
+  document.getElementById('cardText').textContent = q.answer;
+  document.getElementById('tapHint').style.display = 'none';
+
+  // Show ref
+  if (q.source || q.ref) {
+    const existing = card.querySelector('.card-ref');
+    if (!existing) {
+      const ref = document.createElement('div');
+      ref.className = 'card-ref';
+      ref.textContent = [q.source, q.ref].filter(Boolean).join(' · ');
+      card.appendChild(ref);
+    }
+  }
+
+  document.getElementById('answerBtns').style.display = 'grid';
+  document.getElementById('flagRow').style.display = 'flex';
+}
+
+function markAnswer(correct) {
+  const q = sessionQuestions[currentIdx];
+  const flagged = document.getElementById('flagBtn').classList.contains('flagged');
+
+  sessionResults.push({ question: q, correct, flagged });
+
+  // Flash card
+  const card = document.getElementById('flashcard');
+  card.classList.add(correct ? 'correct-flash' : 'wrong-flash');
+
+  setTimeout(() => {
+    currentIdx++;
+    if (currentIdx >= sessionQuestions.length) {
+      showResults();
+    } else {
+      renderQuestion();
+    }
+  }, 300);
+}
+
+function flagQuestion() {
+  const btn = document.getElementById('flagBtn');
+  btn.classList.toggle('flagged');
+  btn.textContent = btn.classList.contains('flagged') ? '⚑ Flagged' : '⚑ Flag this question';
+  if (btn.classList.contains('flagged')) showToast('Question flagged for review');
+}
+
+function confirmExit() {
+  if (currentIdx > 0 && confirm('Exit this quiz session?')) {
+    showScreen('home');
+  } else if (currentIdx === 0) {
+    showScreen('home');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// RESULTS
+// ═══════════════════════════════════════════════
+function showResults() {
+  showScreen('results');
+
+  const total = sessionResults.length;
+  const correct = sessionResults.filter(r => r.correct).length;
+  const wrong = sessionResults.filter(r => !r.correct).length;
+  const flagged = sessionResults.filter(r => r.flagged).length;
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+  document.getElementById('resultsPct').textContent = `${pct}%`;
+  document.getElementById('rCorrect').textContent = correct;
+  document.getElementById('rWrong').textContent = wrong;
+  document.getElementById('rFlagged').textContent = flagged;
+
+  // Score ring
+  const circumference = 2 * Math.PI * 50; // ~314
+  const offset = circumference - (pct / 100) * circumference;
+  setTimeout(() => {
+    document.getElementById('scoreCircle').style.strokeDashoffset = offset;
+    document.getElementById('scoreCircle').style.stroke = pct >= 80 ? '#3ecf6e' : pct >= 60 ? '#e8b84b' : '#e85050';
+  }, 100);
+
+  // Title
+  const titles = ['Keep studying!', 'Getting there', 'Solid effort', 'Good work', 'Excellent!', 'Outstanding!'];
+  const idx = Math.min(Math.floor(pct / 20), 5);
+  document.getElementById('resultsTitle').textContent = titles[idx];
+  document.getElementById('resultsSub').textContent = `${correct} correct from ${total} questions`;
+
+  // Review list
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+
+  const wrongItems = sessionResults.filter(r => !r.correct);
+  const correctItems = sessionResults.filter(r => r.correct);
+  const flaggedItems = sessionResults.filter(r => r.flagged);
+
+  if (wrongItems.length > 0) {
+    list.innerHTML += `<div class="review-section-title">Missed (${wrongItems.length})</div>`;
+    wrongItems.forEach(r => { list.innerHTML += renderReviewItem(r, 'wrong'); });
+  }
+
+  if (flaggedItems.length > 0) {
+    list.innerHTML += `<div class="review-section-title">Flagged for review (${flaggedItems.length})</div>`;
+    flaggedItems.forEach(r => { list.innerHTML += renderReviewItem(r, 'flagged-item'); });
+  }
+
+  if (correctItems.length > 0) {
+    list.innerHTML += `<div class="review-section-title">Correct (${correctItems.length})</div>`;
+    correctItems.forEach(r => { list.innerHTML += renderReviewItem(r, 'correct'); });
+  }
+}
+
+function renderReviewItem(r, cls) {
+  const q = r.question;
+  const ref = [q.source, q.ref].filter(Boolean).join(' · ');
+  return `
+    <div class="review-item ${cls}">
+      <div class="review-q">${escHtml(q.question)}</div>
+      <div class="review-a">${escHtml(q.answer)}</div>
+      ${ref ? `<div class="review-ref">${escHtml(ref)}</div>` : ''}
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════
+// PDF GENERATOR
+// ═══════════════════════════════════════════════
+function showPDF() {
+  // Sync filters
+  const acSel = document.getElementById('filterAircraft');
+  const catSel = document.getElementById('filterCategory');
+  document.getElementById('pdfAircraft').value = acSel.value;
+  document.getElementById('pdfCategory').value = catSel.value;
+  showScreen('pdfgen');
+  updatePdfPreview();
+}
+
+function setPdfFormat(f) {
+  pdfFormat = f;
+  document.getElementById('pillQOnly').className = 'pill' + (f === 'q' ? ' active' : '');
+  document.getElementById('pillQA').className = 'pill' + (f === 'qa' ? ' active' : '');
+  updatePdfPreview();
+}
+
+function updatePdfPreview() {
+  const ac = (document.getElementById('pdfAircraft') || {}).value || 'all';
+  const cat = (document.getElementById('pdfCategory') || {}).value || 'all';
+  const pool = getFilteredQuestions(ac, cat, 'all');
+  const n = Math.min(pdfQtyValue, pool.length);
+  const title = (document.getElementById('pdfTitle') || {}).value || "Pilot's Notes Quiz";
+  const fmt = pdfFormat === 'q' ? 'Questions only + separate answer sheet' : 'Questions with answers inline';
+  document.getElementById('pdfPreviewContent').innerHTML =
+    `<b style="color:var(--text)">${escHtml(title)}</b><br>` +
+    `${n} questions from ${pool.length} available<br>` +
+    `Format: ${fmt}`;
+}
+
+document.addEventListener('change', updatePdfPreview);
+
+function generatePDF() {
+  if (typeof window.jspdf === 'undefined') {
+    showToast('PDF library not loaded');
+    return;
+  }
+
+  const ac = document.getElementById('pdfAircraft').value;
+  const cat = document.getElementById('pdfCategory').value;
+  const title = document.getElementById('pdfTitle').value || "Pilot's Notes Quiz";
+  const { jsPDF } = window.jspdf;
+
+  let pool = getFilteredQuestions(ac, cat, 'all');
+  if (pool.length === 0) { showToast('No questions match filters'); return; }
+
+  pool = shuffle(pool).slice(0, Math.min(pdfQtyValue, pool.length));
+
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, marginL = 18, marginR = 18, contentW = W - marginL - marginR;
+  const pageH = 297, marginT = 24, marginB = 20;
+  let y = marginT;
+
+  const dateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  function newPage() {
+    doc.addPage();
+    y = marginT;
+    // Header line
+    doc.setDrawColor(60, 70, 90);
+    doc.setLineWidth(0.3);
+    doc.line(marginL, 14, W - marginR, 14);
+    doc.setFontSize(8);
+    doc.setTextColor(140, 148, 170);
+    doc.text(title, marginL, 11);
+    doc.text(dateStr, W - marginR, 11, { align: 'right' });
+  }
+
+  function checkY(needed) {
+    if (y + needed > pageH - marginB) { newPage(); }
+  }
+
+  // ── QUESTION PAGE ──
+  // Title block
+  doc.setFillColor(22, 26, 35);
+  doc.rect(0, 0, W, 38, 'F');
+  doc.setFontSize(22);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(232, 184, 75);
+  doc.text(title.toUpperCase(), marginL, 18);
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(138, 148, 170);
+  doc.text(`${pool.length} Questions  ·  ${ac !== 'all' ? ac : 'All Aircraft'}  ·  ${cat !== 'all' ? cat : 'All Categories'}  ·  ${dateStr}`, marginL, 26);
+  doc.setFontSize(8);
+  doc.setTextColor(85, 95, 122);
+  doc.text('Circle one:   ✓ Got it     ✗ Missed it', marginL, 33);
+  y = 46;
+
+  pool.forEach((q, i) => {
+    // Question number + text
+    const qLines = doc.splitTextToSize(`${i + 1}. ${q.question}`, contentW - 16);
+    const blockH = qLines.length * 5 + (pdfFormat === 'qa' ? 12 : 8);
+    checkY(blockH + 4);
+
+    // Subtle background for odd questions
+    if (i % 2 === 0) {
+      doc.setFillColor(20, 24, 34);
+      doc.rect(marginL - 2, y - 3, contentW + 4, blockH, 'F');
+    }
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(232, 236, 244);
+    doc.text(qLines, marginL, y);
+    y += qLines.length * 5 + 2;
+
+    // Ref
+    if (q.source || q.ref) {
+      doc.setFontSize(7.5);
+      doc.setTextColor(85, 95, 122);
+      doc.text([q.source, q.ref].filter(Boolean).join(' · '), marginL + 4, y);
+      y += 4;
+    }
+
+    // Inline answer (qa format)
+    if (pdfFormat === 'qa') {
+      const aLines = doc.splitTextToSize(`→ ${q.answer}`, contentW - 8);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'italic');
+      doc.setTextColor(100, 160, 120);
+      doc.text(aLines, marginL + 4, y);
+      y += aLines.length * 4.5 + 2;
+    } else {
+      // Mark boxes
+      doc.setDrawColor(60, 70, 90);
+      doc.setLineWidth(0.4);
+      doc.rect(W - marginR - 14, y - 5, 6, 5);
+      doc.rect(W - marginR - 6, y - 5, 6, 5);
+      doc.setFontSize(7);
+      doc.setTextColor(85, 95, 122);
+      doc.text('✓', W - marginR - 11, y - 1.5);
+      doc.text('✗', W - marginR - 3, y - 1.5);
+      y += 2;
+    }
+
+    // Divider
+    doc.setDrawColor(35, 42, 58);
+    doc.setLineWidth(0.2);
+    doc.line(marginL, y, W - marginR, y);
+    y += 5;
+  });
+
+  // Footer on last Q page
+  doc.setFontSize(8);
+  doc.setTextColor(85, 95, 122);
+  doc.text(`${pool.length} questions`, W / 2, pageH - 10, { align: 'center' });
+
+  // ── ANSWER PAGE (questions-only format) ──
+  if (pdfFormat === 'q') {
+    doc.addPage();
+    y = marginT;
+
+    // Answer sheet header
+    doc.setFillColor(22, 26, 35);
+    doc.rect(0, 0, W, 28, 'F');
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(232, 184, 75);
+    doc.text('ANSWER SHEET', marginL, 16);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(138, 148, 170);
+    doc.text(`${title}  ·  ${dateStr}`, marginL, 23);
+    y = 36;
+
+    pool.forEach((q, i) => {
+      const aLines = doc.splitTextToSize(q.answer, contentW - 20);
+      const blockH = aLines.length * 4.5 + 10;
+      checkY(blockH + 4);
+
+      if (i % 2 === 0) {
+        doc.setFillColor(20, 24, 34);
+        doc.rect(marginL - 2, y - 3, contentW + 4, blockH, 'F');
+      }
+
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(232, 184, 75);
+      doc.text(`${i + 1}.`, marginL, y);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(200, 210, 228);
+      doc.text(aLines, marginL + 7, y);
+      y += aLines.length * 4.5 + 2;
+
+      if (q.source || q.ref) {
+        doc.setFontSize(7);
+        doc.setTextColor(85, 95, 122);
+        doc.text([q.source, q.ref].filter(Boolean).join(' · '), marginL + 7, y);
+        y += 3.5;
+      }
+
+      doc.setDrawColor(35, 42, 58);
+      doc.setLineWidth(0.2);
+      doc.line(marginL, y, W - marginR, y);
+      y += 4;
+    });
+  }
+
+  doc.save(`pilots_notes_quiz_${new Date().toISOString().slice(0,10)}.pdf`);
+  showToast('PDF downloaded');
+}
+
+// ═══════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function showLoading(on) {
+  document.getElementById('loadingScreen').classList.toggle('active', on);
+}
+
+function showError(msg) {
+  const box = document.getElementById('errorBox');
+  box.classList.add('active');
+  document.getElementById('errorDetail').textContent = msg;
+}
+
+function hideError() {
+  document.getElementById('errorBox').classList.remove('active');
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function changeQty(delta) {
+  qtyValue = Math.max(5, Math.min(50, qtyValue + delta));
+  document.getElementById('qtyDisplay').textContent = qtyValue;
+}
+
+function changePdfQty(delta) {
+  pdfQtyValue = Math.max(5, Math.min(100, pdfQtyValue + delta));
+  document.getElementById('pdfQtyDisplay').textContent = pdfQtyValue;
+  updatePdfPreview();
+}
+</script>
+</body>
+</html>
